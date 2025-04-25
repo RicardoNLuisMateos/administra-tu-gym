@@ -1,6 +1,7 @@
 import { StyleSheet, View, Text, TouchableOpacity, ScrollView, SafeAreaView } from "react-native";
 import { Picker } from '@react-native-picker/picker';
 import { useState } from 'react';
+import { useRouter } from 'expo-router';
 
 // Datos de ejemplo - reemplazar con datos reales más tarde
 const proximosPagos = [
@@ -12,6 +13,7 @@ const proximosPagos = [
 
 export default function Index() {
   const [selectedMonth, setSelectedMonth] = useState('1');
+  const router = useRouter();
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -65,7 +67,10 @@ export default function Index() {
         </View>
 
         <View style={styles.actionButtons}>
-          <TouchableOpacity style={styles.actionButton}>
+          <TouchableOpacity 
+            style={styles.actionButton}
+            onPress={() => router.push('/add-member')}
+          >
             <Text style={styles.actionButtonText}>Agregar Miembro</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.actionButton}>
