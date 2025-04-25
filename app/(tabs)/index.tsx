@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, TouchableOpacity, ScrollView } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, ScrollView, SafeAreaView } from "react-native";
 import { Picker } from '@react-native-picker/picker';
 import { useState } from 'react';
 
@@ -14,84 +14,97 @@ export default function Index() {
   const [selectedMonth, setSelectedMonth] = useState('1');
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.header}>
-        <View style={styles.pickerContainer}>
-          <Picker
-            selectedValue={selectedMonth}
-            onValueChange={(itemValue) => setSelectedMonth(itemValue)}
-            style={styles.picker}
-            dropdownIconColor="#FFFFFF"
-            itemStyle={styles.pickerItem}
-            mode="dropdown"
-          >
-            <Picker.Item label="Enero" value="1" color="#FFFFFF" style={{backgroundColor: '#333333'}} />
-            <Picker.Item label="Febrero" value="2" color="#FFFFFF" style={{backgroundColor: '#333333'}} />
-            <Picker.Item label="Marzo" value="3" color="#FFFFFF" style={{backgroundColor: '#333333'}} />
-            <Picker.Item label="Abril" value="4" color="#FFFFFF" style={{backgroundColor: '#333333'}} />
-            <Picker.Item label="Mayo" value="5" color="#FFFFFF" style={{backgroundColor: '#333333'}} />
-            <Picker.Item label="Junio" value="6" color="#FFFFFF" style={{backgroundColor: '#333333'}} />
-            <Picker.Item label="Julio" value="7" color="#FFFFFF" style={{backgroundColor: '#333333'}} />
-            <Picker.Item label="Agosto" value="8" color="#FFFFFF" style={{backgroundColor: '#333333'}} />
-            <Picker.Item label="Septiembre" value="9" color="#FFFFFF" style={{backgroundColor: '#333333'}} />
-            <Picker.Item label="Octubre" value="10" color="#FFFFFF" style={{backgroundColor: '#333333'}} />
-            <Picker.Item label="Noviembre" value="11" color="#FFFFFF" style={{backgroundColor: '#333333'}} />
-            <Picker.Item label="Diciembre" value="12" color="#FFFFFF" style={{backgroundColor: '#333333'}} />
-          </Picker>
-        </View>
-        <TouchableOpacity style={styles.payButton}>
-          <Text style={styles.payButtonText}>Pagar</Text>
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.statsContainer}>
-        <View style={styles.statItem}>
-          <Text style={styles.statLabel}>Ingresos</Text>
-          <Text style={styles.statValue}>$8750</Text>
-        </View>
-        <View style={styles.statItem}>
-          <Text style={styles.statLabel}>Egresos</Text>
-          <Text style={styles.statValue}>$3200</Text>
-        </View>
-        <View style={styles.statItem}>
-          <Text style={styles.statLabel}>Balance</Text>
-          <Text style={styles.statValue}>$5550</Text>
-        </View>
-      </View>
-
-      <View style={styles.actionButtons}>
-        <TouchableOpacity style={styles.actionButton}>
-          <Text style={styles.actionButtonText}>Agregar Miembro</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.actionButton}>
-          <Text style={styles.actionButtonText}>Egresos</Text>
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.paymentsSection}>
-        <Text style={styles.sectionTitle}>Próximos Pagos</Text>
-        <View style={styles.tableHeader}>
-          <Text style={[styles.tableHeaderText, styles.memberColumn]}>Miembro</Text>
-          <Text style={[styles.tableHeaderText, styles.amountColumn]}>$</Text>
-          <Text style={[styles.tableHeaderText, styles.dateColumn]}>Fecha</Text>
-        </View>
-        {proximosPagos.map((pago) => (
-          <View key={pago.id} style={styles.tableRow}>
-            <Text style={[styles.tableCell, styles.memberColumn]}>{pago.miembro}</Text>
-            <Text style={[styles.tableCell, styles.amountColumn]}>{pago.monto}</Text>
-            <Text style={[styles.tableCell, styles.dateColumn]}>{pago.fecha}</Text>
+    <SafeAreaView style={styles.safeArea}>
+      <ScrollView 
+        style={styles.container}
+        showsVerticalScrollIndicator={true}
+        contentContainerStyle={styles.scrollContent}
+      >
+        <View style={styles.header}>
+          <View style={styles.pickerContainer}>
+            <Picker
+              selectedValue={selectedMonth}
+              onValueChange={(itemValue) => setSelectedMonth(itemValue)}
+              style={styles.picker}
+              dropdownIconColor="#FFFFFF"
+              itemStyle={styles.pickerItem}
+              mode="dropdown"
+            >
+              <Picker.Item label="Enero" value="1" color="#FFFFFF" style={{backgroundColor: '#333333'}} />
+              <Picker.Item label="Febrero" value="2" color="#FFFFFF" style={{backgroundColor: '#333333'}} />
+              <Picker.Item label="Marzo" value="3" color="#FFFFFF" style={{backgroundColor: '#333333'}} />
+              <Picker.Item label="Abril" value="4" color="#FFFFFF" style={{backgroundColor: '#333333'}} />
+              <Picker.Item label="Mayo" value="5" color="#FFFFFF" style={{backgroundColor: '#333333'}} />
+              <Picker.Item label="Junio" value="6" color="#FFFFFF" style={{backgroundColor: '#333333'}} />
+              <Picker.Item label="Julio" value="7" color="#FFFFFF" style={{backgroundColor: '#333333'}} />
+              <Picker.Item label="Agosto" value="8" color="#FFFFFF" style={{backgroundColor: '#333333'}} />
+              <Picker.Item label="Septiembre" value="9" color="#FFFFFF" style={{backgroundColor: '#333333'}} />
+              <Picker.Item label="Octubre" value="10" color="#FFFFFF" style={{backgroundColor: '#333333'}} />
+              <Picker.Item label="Noviembre" value="11" color="#FFFFFF" style={{backgroundColor: '#333333'}} />
+              <Picker.Item label="Diciembre" value="12" color="#FFFFFF" style={{backgroundColor: '#333333'}} />
+            </Picker>
           </View>
-        ))}
-      </View>
-    </ScrollView>
+          <TouchableOpacity style={styles.payButton}>
+            <Text style={styles.payButtonText}>Pagar</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.statsContainer}>
+          <View style={styles.statItem}>
+            <Text style={styles.statLabel}>Ingresos</Text>
+            <Text style={styles.statValue}>$8750</Text>
+          </View>
+          <View style={styles.statItem}>
+            <Text style={styles.statLabel}>Egresos</Text>
+            <Text style={styles.statValue}>$3200</Text>
+          </View>
+          <View style={styles.statItem}>
+            <Text style={styles.statLabel}>Balance</Text>
+            <Text style={styles.statValue}>$5550</Text>
+          </View>
+        </View>
+
+        <View style={styles.actionButtons}>
+          <TouchableOpacity style={styles.actionButton}>
+            <Text style={styles.actionButtonText}>Agregar Miembro</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.actionButton}>
+            <Text style={styles.actionButtonText}>Egresos</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.paymentsSection}>
+          <Text style={styles.sectionTitle}>Próximos Pagos</Text>
+          <View style={styles.tableHeader}>
+            <Text style={[styles.tableHeaderText, styles.memberColumn]}>Miembro</Text>
+            <Text style={[styles.tableHeaderText, styles.amountColumn]}>$</Text>
+            <Text style={[styles.tableHeaderText, styles.dateColumn]}>Fecha</Text>
+          </View>
+          {proximosPagos.map((pago) => (
+            <View key={pago.id} style={styles.tableRow}>
+              <Text style={[styles.tableCell, styles.memberColumn]}>{pago.miembro}</Text>
+              <Text style={[styles.tableCell, styles.amountColumn]}>{pago.monto}</Text>
+              <Text style={[styles.tableCell, styles.dateColumn]}>{pago.fecha}</Text>
+            </View>
+          ))}
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#121212',
+  },
   container: {
     flex: 1,
     backgroundColor: '#121212',
+  },
+  scrollContent: {
     padding: 16,
+    paddingBottom: 32, // Añade más espacio al final para mejor scroll
   },
   header: {
     flexDirection: 'row',
