@@ -23,19 +23,20 @@ export default function Index() {
             style={styles.picker}
             dropdownIconColor="#FFFFFF"
             itemStyle={styles.pickerItem}
+            mode="dropdown"
           >
-            <Picker.Item label="Enero" value="1" color="#FFFFFF" />
-            <Picker.Item label="Febrero" value="2" color="#FFFFFF" />
-            <Picker.Item label="Marzo" value="3" color="#FFFFFF" />
-            <Picker.Item label="Abril" value="4" color="#FFFFFF" />
-            <Picker.Item label="Mayo" value="5" color="#FFFFFF" />
-            <Picker.Item label="Junio" value="6" color="#FFFFFF" />
-            <Picker.Item label="Julio" value="7" color="#FFFFFF" />
-            <Picker.Item label="Agosto" value="8" color="#FFFFFF" />
-            <Picker.Item label="Septiembre" value="9" color="#FFFFFF" />
-            <Picker.Item label="Octubre" value="10" color="#FFFFFF" />
-            <Picker.Item label="Noviembre" value="11" color="#FFFFFF" />
-            <Picker.Item label="Diciembre" value="12" color="#FFFFFF" />
+            <Picker.Item label="Enero" value="1" color="#FFFFFF" style={{backgroundColor: '#333333'}} />
+            <Picker.Item label="Febrero" value="2" color="#FFFFFF" style={{backgroundColor: '#333333'}} />
+            <Picker.Item label="Marzo" value="3" color="#FFFFFF" style={{backgroundColor: '#333333'}} />
+            <Picker.Item label="Abril" value="4" color="#FFFFFF" style={{backgroundColor: '#333333'}} />
+            <Picker.Item label="Mayo" value="5" color="#FFFFFF" style={{backgroundColor: '#333333'}} />
+            <Picker.Item label="Junio" value="6" color="#FFFFFF" style={{backgroundColor: '#333333'}} />
+            <Picker.Item label="Julio" value="7" color="#FFFFFF" style={{backgroundColor: '#333333'}} />
+            <Picker.Item label="Agosto" value="8" color="#FFFFFF" style={{backgroundColor: '#333333'}} />
+            <Picker.Item label="Septiembre" value="9" color="#FFFFFF" style={{backgroundColor: '#333333'}} />
+            <Picker.Item label="Octubre" value="10" color="#FFFFFF" style={{backgroundColor: '#333333'}} />
+            <Picker.Item label="Noviembre" value="11" color="#FFFFFF" style={{backgroundColor: '#333333'}} />
+            <Picker.Item label="Diciembre" value="12" color="#FFFFFF" style={{backgroundColor: '#333333'}} />
           </Picker>
         </View>
         <TouchableOpacity style={styles.payButton}>
@@ -101,7 +102,7 @@ const styles = StyleSheet.create({
   pickerContainer: {
     flex: 1,
     marginRight: 16,
-    backgroundColor: 'rgba(51, 51, 51, 0.8)', // Fondo negro con transparencia
+    backgroundColor: '#333333',
     borderRadius: 8,
     height: 45,
     justifyContent: 'center',
@@ -109,11 +110,11 @@ const styles = StyleSheet.create({
   picker: {
     color: '#FFFFFF',
     height: 45,
-    backgroundColor: 'transparent',
+    backgroundColor: '#333333',
   },
   pickerItem: {
-    color: '#FFFFFF',
     backgroundColor: '#333333',
+    color: '#FFFFFF',
     fontSize: 16,
   },
   payButton: {
