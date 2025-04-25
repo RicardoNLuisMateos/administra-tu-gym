@@ -22,14 +22,20 @@ export default function Index() {
             onValueChange={(itemValue) => setSelectedMonth(itemValue)}
             style={styles.picker}
             dropdownIconColor="#FFFFFF"
+            itemStyle={styles.pickerItem}
           >
-            <Picker.Item label="Enero" value="1" />
-            <Picker.Item label="Febrero" value="2" />
-            <Picker.Item label="Febrero" value="3" />
-            <Picker.Item label="Febrero" value="4" />
-            <Picker.Item label="Febrero" value="5" />
-            <Picker.Item label="Febrero" value="6" />
-            {/* Agregar más meses */}
+            <Picker.Item label="Enero" value="1" color="#FFFFFF" />
+            <Picker.Item label="Febrero" value="2" color="#FFFFFF" />
+            <Picker.Item label="Marzo" value="3" color="#FFFFFF" />
+            <Picker.Item label="Abril" value="4" color="#FFFFFF" />
+            <Picker.Item label="Mayo" value="5" color="#FFFFFF" />
+            <Picker.Item label="Junio" value="6" color="#FFFFFF" />
+            <Picker.Item label="Julio" value="7" color="#FFFFFF" />
+            <Picker.Item label="Agosto" value="8" color="#FFFFFF" />
+            <Picker.Item label="Septiembre" value="9" color="#FFFFFF" />
+            <Picker.Item label="Octubre" value="10" color="#FFFFFF" />
+            <Picker.Item label="Noviembre" value="11" color="#FFFFFF" />
+            <Picker.Item label="Diciembre" value="12" color="#FFFFFF" />
           </Picker>
         </View>
         <TouchableOpacity style={styles.payButton}>
@@ -95,17 +101,27 @@ const styles = StyleSheet.create({
   pickerContainer: {
     flex: 1,
     marginRight: 16,
-    backgroundColor: '#1E1E1E',
+    backgroundColor: 'rgba(51, 51, 51, 0.8)', // Fondo negro con transparencia
     borderRadius: 8,
+    height: 45,
+    justifyContent: 'center',
   },
   picker: {
     color: '#FFFFFF',
+    height: 45,
+    backgroundColor: 'transparent',
+  },
+  pickerItem: {
+    color: '#FFFFFF',
+    backgroundColor: '#333333',
+    fontSize: 16,
   },
   payButton: {
-    backgroundColor: '#1E1E1E',
+    backgroundColor: '#333333', // Actualizado para coincidir con los botones de acción
     paddingVertical: 12,
     paddingHorizontal: 24,
     borderRadius: 8,
+    height: 45, // Altura fija para coincidir con el picker
   },
   payButtonText: {
     color: '#FFFFFF',
