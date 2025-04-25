@@ -25,13 +25,13 @@ export default function TabLayout() {
         }
       }}
       >
-      <Tabs.Screen name="index" options={{ 
-        title: 'Dashboard',
-        tabBarIcon: ({ color,focused }) => <Ionicons name={ focused ? 'home' : 'home-outline'} size={24} color={color} />
-      }} />
       <Tabs.Screen name="members" options={{ 
         title: 'Members',
         tabBarIcon: ({ color,focused }) => <Ionicons name={ focused ? 'people' : 'people-outline'} size={24} color={color} />
+      }} />
+      <Tabs.Screen name="index" options={{ 
+        title: 'Dashboard',
+        tabBarIcon: ({ color,focused }) => <Ionicons name={ focused ? 'home' : 'home-outline'} size={24} color={color} />
       }} />
       <Tabs.Screen name="about" options={{ 
         title: 'About',
