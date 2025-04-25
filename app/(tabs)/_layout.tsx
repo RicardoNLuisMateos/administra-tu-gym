@@ -5,25 +5,38 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{ 
-        tabBarActiveTintColor: '#ffd33d',// color of the selected tab
+        tabBarActiveTintColor: '#FFFFFF',
+        tabBarInactiveTintColor: '#888888',
         headerStyle: {
-          backgroundColor: '#25292e',
+          backgroundColor: '#121212',
         },
         headerShadowVisible: false,
         headerTintColor: '#fff',
         tabBarStyle: {
-          backgroundColor: '#25292e',
+          backgroundColor: '#121212',
+          borderTopWidth: 0,
+          height: 60,
+          paddingBottom: 8,
+          paddingTop: 8,
+        },
+        tabBarLabelStyle: {
+          fontSize: 12,
+          marginTop: 2,
         }
       }}
       >
       <Tabs.Screen name="index" options={{ 
-        title: 'Home',
-        tabBarIcon: ({ color,focused }) => <Ionicons name={ focused ? 'home-sharp' : 'home-outline'} size={24} color={color} />
+        title: 'Dashboard',
+        tabBarIcon: ({ color,focused }) => <Ionicons name={ focused ? 'home' : 'home-outline'} size={24} color={color} />
+      }} />
+      <Tabs.Screen name="members" options={{ 
+        title: 'Members',
+        tabBarIcon: ({ color,focused }) => <Ionicons name={ focused ? 'people' : 'people-outline'} size={24} color={color} />
       }} />
       <Tabs.Screen name="about" options={{ 
         title: 'About',
-        tabBarIcon: ({ color,focused }) => <Ionicons name={ focused ? 'information-circle-sharp' : 'information-circle-outline'} size={24} color={color} />
-        }} />
+        tabBarIcon: ({ color,focused }) => <Ionicons name={ focused ? 'information-circle' : 'information-circle-outline'} size={24} color={color} />
+      }} />
     </Tabs>
   );
 }
