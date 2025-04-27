@@ -23,7 +23,7 @@ export default function AddMember() {
     const cargarPlanes = async () => {
       try {
         const planesData = await databaseOperations.plans.getAll();
-        setPlanes(planesData);
+        setPlanes(planesData as Plan[]);
       } catch (error) {
         console.error('Error al cargar los planes:', error);
       }
