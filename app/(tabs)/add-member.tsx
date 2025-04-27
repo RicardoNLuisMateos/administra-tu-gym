@@ -1,12 +1,36 @@
 import { StyleSheet, View, Text, TextInput, TouchableOpacity, ScrollView, SafeAreaView, Switch } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { databaseOperations } from '../database/database';
+
+interface Plan {
+  id: number;
+  name: string;
+  price: number;
+  time: number;
+  organization_id: number;
+}
 
 export default function AddMember() {
+  
   const [nombre, setNombre] = useState('');
-  const [plan, setPlan] = useState('basico');
+  const [plan, setPlan] = useState('');
   const [deuda, setDeuda] = useState('0');
   const [tieneDeuda, setTieneDeuda] = useState(false);
+  const [planes, setPlanes] = useState<Plan[]>([]);
+
+  useEffect(() => {
+    const cargarPlanes = async () => {
+      try {
+        const planesData = await databaseOperations.plans.getAll();
+        setPlanes(planesData);
+      } catch (error) {
+        console.error('Error al cargar los planes:', error);
+      }
+    };
+
+    cargarPlanes();
+  }, []);
 
   const historialPagos = [
     { fecha: '01/01/2024', monto: 500 },
@@ -40,10 +64,17 @@ export default function AddMember() {
               onValueChange={(itemValue) => setPlan(itemValue)}
               style={styles.picker}
               dropdownIconColor="#FFFFFF"
+              mode="dropdown"
             >
-              <Picker.Item label="Básico" value="basico" color="#FFFFFF" />
-              <Picker.Item label="Premium" value="premium" color="#FFFFFF" />
-              <Picker.Item label="VIP" value="vip" color="#FFFFFF" />
+              {planes.map((plan) => (
+                <Picker.Item 
+                  key={plan.id}
+                  label={`${plan.name} - $${plan.price}`}
+                  value={plan.id.toString()}
+                  color="#FFFFFF"
+                  style={{backgroundColor: '#333333'}}
+                />
+              ))}
             </Picker>
           </View>
         </View>
@@ -124,10 +155,12 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     height: 45,
     justifyContent: 'center',
+    overflow: 'hidden'
   },
   picker: {
     color: '#FFFFFF',
     height: 45,
+    backgroundColor: '#333333'
   },
   tableHeader: {
     flexDirection: 'row',
