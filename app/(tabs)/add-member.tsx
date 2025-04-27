@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
   },
   picker: {
     color: '#FFFFFF',
-    height: 45,
+    height: 50,
     backgroundColor: '#333333'
   },
   tableHeader: {
