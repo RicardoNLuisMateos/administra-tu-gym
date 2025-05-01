@@ -76,6 +76,9 @@ export default function Index() {
           <TouchableOpacity style={styles.actionButton}>
             <Text style={styles.actionButtonText}>Egresos</Text>
           </TouchableOpacity>
+          <TouchableOpacity style={styles.actionButton}>
+            <Text style={styles.actionButtonText}>Miembros</Text>
+          </TouchableOpacity>
         </View>
 
         <View style={styles.paymentsSection}>
@@ -127,7 +130,7 @@ const styles = StyleSheet.create({
   },
   picker: {
     color: '#FFFFFF',
-    height: 45,
+    height: 50,
     backgroundColor: '#333333',
   },
   pickerItem: {

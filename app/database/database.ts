@@ -10,13 +10,19 @@ const initializeDatabase = async () => {
     CREATE TABLE IF NOT EXISTS organization (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       name TEXT NOT NULL,
-      logo TEXT
+      logo TEXT,
+      active BOOLEAN DEFAULT 1,
+      create_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+      update_time DATETIME DEFAULT CURRENT_TIMESTAMP
     );
 
     CREATE TABLE IF NOT EXISTS member (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       name TEXT NOT NULL,
       organization_id INTEGER,
+      active BOOLEAN DEFAULT 1,
+      create_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+      update_time DATETIME DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (organization_id) REFERENCES organization (id)
     );
 
@@ -26,6 +32,9 @@ const initializeDatabase = async () => {
       name TEXT NOT NULL,
       price REAL NOT NULL,
       time INTEGER NOT NULL,
+      active BOOLEAN DEFAULT 1,
+      create_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+      update_time DATETIME DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (organization_id) REFERENCES organization (id)
     );
 
@@ -33,6 +42,11 @@ const initializeDatabase = async () => {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       member_id INTEGER,
       plan_id INTEGER,
+      start_date DATETIME NOT NULL,
+      end_date DATETIME NOT NULL,
+      active BOOLEAN DEFAULT 1,
+      create_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+      update_time DATETIME DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (member_id) REFERENCES member (id),
       FOREIGN KEY (plan_id) REFERENCES plans (id)
     );
@@ -42,6 +56,9 @@ const initializeDatabase = async () => {
       subscription_id INTEGER,
       amount REAL NOT NULL,
       payment_date TEXT NOT NULL,
+      active BOOLEAN DEFAULT 1,
+      create_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+      update_time DATETIME DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (subscription_id) REFERENCES subscriptions (id)
     );
   `);

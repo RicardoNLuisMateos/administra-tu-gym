@@ -17,7 +17,7 @@ export default function AddMember() {
   const [nombre, setNombre] = useState('');
   const [plan, setPlan] = useState('');
   const [deuda, setDeuda] = useState('0');
-  const [tieneDeuda, setTieneDeuda] = useState(false);
+  const [suscriptionActive, setSuscriptionActive] = useState(false);
   const [planes, setPlanes] = useState<Plan[]>([]);
   const router = useRouter();
 
@@ -67,14 +67,14 @@ export default function AddMember() {
           Alert.alert('Error', 'Ocurrió un error al crear la suscripción');
           return;
         }
-        
+
         Alert.alert(
           'Éxito',
           'Miembro agregado correctamente',
           [
             {
               text: 'OK',
-              onPress: () => router.back()
+              //onPress: () => router.back()
             }
           ]
         );
@@ -152,10 +152,10 @@ export default function AddMember() {
               keyboardType="numeric"
             />
             <Switch
-              value={tieneDeuda}
-              onValueChange={setTieneDeuda}
+              value={suscriptionActive}
+              onValueChange={setSuscriptionActive}
               trackColor={{ false: '#767577', true: '#81b0ff' }}
-              thumbColor={tieneDeuda ? '#f5dd4b' : '#f4f3f4'}
+              thumbColor={suscriptionActive ? '#f5dd4b' : '#f4f3f4'}
             />
           </View>
         </View>
