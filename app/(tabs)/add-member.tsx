@@ -1,7 +1,8 @@
-import { StyleSheet, View, Text, TextInput, TouchableOpacity, ScrollView, SafeAreaView, Switch } from 'react-native';
+import { StyleSheet, View, Text, TextInput, TouchableOpacity, ScrollView, SafeAreaView, Switch, Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { useState, useEffect } from 'react';
 import { databaseOperations } from '../database/database';
+import { useRouter } from 'expo-router';
 
 interface Plan {
   id: number;
@@ -18,6 +19,7 @@ export default function AddMember() {
   const [deuda, setDeuda] = useState('0');
   const [tieneDeuda, setTieneDeuda] = useState(false);
   const [planes, setPlanes] = useState<Plan[]>([]);
+  const router = useRouter();
 
   useEffect(() => {
     const cargarPlanes = async () => {
@@ -37,6 +39,51 @@ export default function AddMember() {
     { fecha: '01/02/2024', monto: 500 },
     { fecha: '01/03/2024', monto: 500 },
   ];
+
+  const handleSaveMember = async () => {
+    try {
+      // Validaciones básicas
+      if (!nombre.trim()) {
+        Alert.alert('Error', 'Por favor ingresa el nombre del miembro');
+        return;
+      }
+
+      if (!plan) {
+        Alert.alert('Error', 'Por favor selecciona un plan');
+        return;
+      }
+      console.log("databaseOperations => ", databaseOperations)
+      // Crear el miembro
+      const memberResult = await databaseOperations.member.create(nombre, 1); // 1 es el ID de la organización
+
+      if (memberResult && memberResult.lastInsertRowId) {
+        // Crear la suscripción
+        const member = await databaseOperations.subscriptions.create({
+          member_id: memberResult.lastInsertRowId,
+          plan_id: parseInt(plan)
+        });
+        console.log("member => ", member)
+        if (!member) {
+          Alert.alert('Error', 'Ocurrió un error al crear la suscripción');
+          return;
+        }
+        
+        Alert.alert(
+          'Éxito',
+          'Miembro agregado correctamente',
+          [
+            {
+              text: 'OK',
+              onPress: () => router.back()
+            }
+          ]
+        );
+      }
+    } catch (error) {
+      console.error('Error al guardar el miembro:', error);
+      Alert.alert('Error', 'Ocurrió un error al guardar el miembro');
+    }
+  };
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -113,7 +160,10 @@ export default function AddMember() {
           </View>
         </View>
 
-        <TouchableOpacity style={styles.saveButton}>
+        <TouchableOpacity 
+          style={styles.saveButton}
+          onPress={handleSaveMember}
+        >
           <Text style={styles.saveButtonText}>Guardar</Text>
         </TouchableOpacity>
       </ScrollView>

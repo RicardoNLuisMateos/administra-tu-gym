@@ -90,7 +90,9 @@ export const getDatabase = async () => {
       console.log("***************************************************")
       const plans = await database.getAllAsync('SELECT * FROM plans');
       console.log("Planes: ", plans)
-      console.log("***************************************************")
+      console.log("*************************************************** WITH JOINs")
+      const members = await database.getAllAsync('SELECT s.id suscription_id, s.member_id, s.plan_id, m.name FROM member m INNER JOIN subscriptions s ON m.id = s.member_id');
+      console.log("member: ", members)
     }
   }
   return database;
@@ -117,6 +119,8 @@ export const databaseOperations = {
   // Operaciones para Member
   member: {
     create: async (name: string, organizationId: number) => {
+      console.log("organizationId: ", organizationId)
+      console.log("name: ", name)
       const db = await getDatabase();
       const result = await db.runAsync(
         'INSERT INTO member (name, organization_id) VALUES (?, ?)',
@@ -143,6 +147,34 @@ export const databaseOperations = {
     getAll: async () => {
       const db = await getDatabase();
       return await db.getAllAsync('SELECT * FROM plans');
+    }
+  },
+  
+  // Operaciones para Subscriptions
+  subscriptions: {
+    create: async ({ member_id, plan_id }: { member_id: number, plan_id: number }) => {
+      const db = await getDatabase();
+      await db.runAsync(
+        'INSERT INTO subscriptions (member_id, plan_id) VALUES (?, ?)',
+        [member_id, plan_id]
+      );
+      const member = await db.getAllAsync(
+        "SELECT s.id suscription_id, s.member_id, s.plan_id, m.name FROM member m INNER JOIN subscriptions s ON m.id = s.member_id WHERE m.id = ?",
+        [member_id]
+      );
+      return member[0];
+    }
+  },
+
+  // Operaciones para Payments
+  payments: {
+    create: async ({ subscription_id, amount, payment_date }: { subscription_id: number, amount: number, payment_date: string }) => {
+      const db = await getDatabase();
+      const result = await db.runAsync(
+        'INSERT INTO payments (subscription_id, amount, payment_date) VALUES (?, ?, ?)',
+        [subscription_id, amount, payment_date]
+      );
+      return result;
     }
   }
 };
