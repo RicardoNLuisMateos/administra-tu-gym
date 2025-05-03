@@ -2,8 +2,8 @@ import { StyleSheet, View, Text, ScrollView, TouchableOpacity } from 'react-nati
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 
-const SettingItem = ({ icon, title, description }) => (
-  <TouchableOpacity style={styles.settingItem}>
+const SettingItem = ({ icon, title, description, onPress }) => (
+  <TouchableOpacity style={styles.settingItem} onPress={onPress}>
     <View style={styles.settingIcon}>
       <Ionicons name={icon} size={24} color="#FFFFFF" />
     </View>
@@ -46,13 +46,12 @@ export default function SettingsScreen() {
           title="Información del Gimnasio"
           description="Editar detalles del establecimiento"
         />
-        <TouchableOpacity onPress={() => router.push('/plans')}>
-          <SettingItem
-            icon="people-outline"
-            title="Planes y Suscripciones"
-            description="Administrar planes de membresía y suscripciones"
-          />
-        </TouchableOpacity>
+        <SettingItem
+          icon="people-outline"
+          title="Planes y Suscripciones"
+          description="Administrar planes de membresía y suscripciones"
+          onPress={() => router.push('/plans')}
+        />
       </View>
     </ScrollView>
   );

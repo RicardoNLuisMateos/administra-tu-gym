@@ -41,7 +41,7 @@ export default function TabLayout() {
       <Tabs.Screen name="plans" options={{ 
         title: 'Planes',
         tabBarIcon: ({ color,focused }) => <Ionicons name={ focused ? 'list' : 'list-outline'} size={24} color={color} />,
-        //href: null
+        href: null
       }} />
       <Tabs.Screen name="about" options={{ 
         title: 'About',
