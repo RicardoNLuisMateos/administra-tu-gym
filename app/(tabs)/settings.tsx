@@ -44,14 +44,9 @@ export default function SettingsScreen() {
           description="Editar detalles del establecimiento"
         />
         <SettingItem
-          icon="card-outline"
-          title="Métodos de Pago"
-          description="Configurar opciones de pago"
-        />
-        <SettingItem
           icon="people-outline"
-          title="Roles de Usuario"
-          description="Administrar permisos y roles"
+          title="Planes y Suscripciones"
+          description="Administrar planes de membresía y suscripciones"
         />
       </View>
     </ScrollView>
