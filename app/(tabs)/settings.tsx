@@ -1,5 +1,6 @@
 import { StyleSheet, View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 
 const SettingItem = ({ icon, title, description }) => (
   <TouchableOpacity style={styles.settingItem}>
@@ -15,6 +16,8 @@ const SettingItem = ({ icon, title, description }) => (
 );
 
 export default function SettingsScreen() {
+  const router = useRouter();
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.section}>
@@ -43,11 +46,13 @@ export default function SettingsScreen() {
           title="Información del Gimnasio"
           description="Editar detalles del establecimiento"
         />
-        <SettingItem
-          icon="people-outline"
-          title="Planes y Suscripciones"
-          description="Administrar planes de membresía y suscripciones"
-        />
+        <TouchableOpacity onPress={() => router.push('/plans')}>
+          <SettingItem
+            icon="people-outline"
+            title="Planes y Suscripciones"
+            description="Administrar planes de membresía y suscripciones"
+          />
+        </TouchableOpacity>
       </View>
     </ScrollView>
   );
