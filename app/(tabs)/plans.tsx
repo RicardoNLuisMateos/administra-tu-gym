@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, ScrollView, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, View, Text, ScrollView, TouchableOpacity, Alert, Modal, TextInput } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useEffect, useState } from 'react';
 import { databaseOperations } from '../database/database';
@@ -13,6 +13,12 @@ interface Plan {
 
 export default function PlansScreen() {
   const [planes, setPlanes] = useState<Plan[]>([]);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [newPlan, setNewPlan] = useState({
+    name: '',
+    price: '',
+    time: ''
+  });
 
   useEffect(() => {
     cargarPlanes();
@@ -53,12 +59,105 @@ export default function PlansScreen() {
     );
   };
 
+  const handleAddPlan = async () => {
+    try {
+      if (!newPlan.name.trim() || !newPlan.price || !newPlan.time) {
+        Alert.alert('Error', 'Por favor completa todos los campos');
+        return;
+      }
+
+      const result = await databaseOperations.plans.create(
+        newPlan.name,
+        parseFloat(newPlan.price),
+        parseInt(newPlan.time),
+        1 // ID de la organización
+      );
+
+      if (result) {
+        setModalVisible(false);
+        setNewPlan({ name: '', price: '', time: '' });
+        cargarPlanes(); // Recargar la lista de planes
+        Alert.alert('Éxito', 'Plan creado correctamente');
+      }
+    } catch (error) {
+      console.error('Error al crear el plan:', error);
+      Alert.alert('Error', 'Ocurrió un error al crear el plan');
+    }
+  };
+
   return (
     <ScrollView style={styles.container}>
-      <TouchableOpacity style={styles.addButton}>
+      <TouchableOpacity 
+        style={styles.addButton}
+        onPress={() => setModalVisible(true)}
+      >
         <Ionicons name="add-circle-outline" size={24} color="#FFFFFF" />
         <Text style={styles.addButtonText}>Agregar Nuevo Plan</Text>
       </TouchableOpacity>
+
+      {/* Modal para agregar nuevo plan */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Nuevo Plan</Text>
+            
+            <View style={styles.inputContainer}>
+              <Text style={styles.inputLabel}>Nombre</Text>
+              <TextInput
+                style={styles.modalInput}
+                placeholder="Nombre del plan"
+                placeholderTextColor="#888888"
+                value={newPlan.name}
+                onChangeText={(text) => setNewPlan({...newPlan, name: text})}
+              />
+            </View>
+
+            <View style={styles.inputContainer}>
+              <Text style={styles.inputLabel}>Precio</Text>
+              <TextInput
+                style={styles.modalInput}
+                placeholder="Precio"
+                placeholderTextColor="#888888"
+                keyboardType="numeric"
+                value={newPlan.price}
+                onChangeText={(text) => setNewPlan({...newPlan, price: text})}
+              />
+            </View>
+
+            <View style={styles.inputContainer}>
+              <Text style={styles.inputLabel}>Duración (Meses)</Text>
+              <TextInput
+                style={styles.modalInput}
+                placeholder="Duración en meses"
+                placeholderTextColor="#888888"
+                keyboardType="numeric"
+                value={newPlan.time}
+                onChangeText={(text) => setNewPlan({...newPlan, time: text})}
+              />
+            </View>
+
+            <View style={styles.modalButtons}>
+              <TouchableOpacity 
+                style={[styles.modalButton, styles.cancelButton]}
+                onPress={() => setModalVisible(false)}
+              >
+                <Text style={styles.modalButtonText}>Cancelar</Text>
+              </TouchableOpacity>
+              <TouchableOpacity 
+                style={[styles.modalButton, styles.saveButton]}
+                onPress={handleAddPlan}
+              >
+                <Text style={styles.modalButtonText}>Guardar</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
 
       <View style={styles.plansContainer}>
         {planes.map((plan) => (
@@ -153,5 +252,64 @@ const styles = StyleSheet.create({
   },
   deleteButton: {
     backgroundColor: '#442222',
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    padding: 16,
+  },
+  modalContent: {
+    backgroundColor: '#1E1E1E',
+    borderRadius: 12,
+    padding: 20,
+    width: '100%',
+    maxWidth: 400,
+  },
+  modalTitle: {
+    fontSize: 24,
+    color: '#FFFFFF',
+    fontWeight: 'bold',
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  inputContainer: {
+    marginBottom: 16,
+  },
+  inputLabel: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    marginBottom: 8,
+  },
+  modalInput: {
+    backgroundColor: '#333333',
+    borderRadius: 8,
+    padding: 12,
+    color: '#FFFFFF',
+    fontSize: 16,
+  },
+  modalButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 20,
+    gap: 12,
+  },
+  modalButton: {
+    flex: 1,
+    padding: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  cancelButton: {
+    backgroundColor: '#442222',
+  },
+  saveButton: {
+    backgroundColor: '#224422',
+  },
+  modalButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '600',
   },
 });
