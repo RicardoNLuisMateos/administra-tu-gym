@@ -15,11 +15,13 @@ interface Plan {
 export default function PlansScreen() {
   const [planes, setPlanes] = useState<Plan[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const [newPlan, setNewPlan] = useState({
     name: '',
     price: '',
     time: ''
   });
+  const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
 
   useEffect(() => {
     cargarPlanes();
@@ -35,54 +37,60 @@ export default function PlansScreen() {
   };
 
   const handleEditPlan = (plan: Plan) => {
-    // Implementar la lógica de edición
-    Alert.alert('Editar Plan', `Editando el plan ${plan.name}`);
+    setSelectedPlan(plan);
+    setNewPlan({
+      name: plan.name,
+      price: plan.price.toString(),
+      time: plan.time.toString()
+    });
+    setIsEditing(true);
+    setModalVisible(true);
   };
 
-  const handleDeletePlan = (plan: Plan) => {
-    Alert.alert(
-      'Eliminar Plan',
-      `¿Estás seguro de que deseas eliminar el plan ${plan.name}?`,
-      [
-        {
-          text: 'Cancelar',
-          style: 'cancel',
-        },
-        {
-          text: 'Eliminar',
-          style: 'destructive',
-          onPress: () => {
-            // Implementar la lógica de eliminación
-            Alert.alert('Plan Eliminado', `El plan ${plan.name} ha sido eliminado`);
-          },
-        },
-      ]
-    );
-  };
-
-  const handleAddPlan = async () => {
+  const handleSavePlan = async () => {
     try {
       if (!newPlan.name.trim() || !newPlan.price || !newPlan.time) {
         Alert.alert('Error', 'Por favor completa todos los campos');
         return;
       }
 
-      const result = await databaseOperations.plans.create(
-        newPlan.name,
-        parseFloat(newPlan.price),
-        parseInt(newPlan.time),
-        1 // ID de la organización
-      );
+      if (isEditing && selectedPlan) {
+        // Aquí implementaremos la actualización del plan
+        const result = await databaseOperations.plans.update(
+          selectedPlan.id,
+          newPlan.name,
+          parseFloat(newPlan.price),
+          parseInt(newPlan.time),
+          1 // ID de la organización
+        );
 
-      if (result) {
-        setModalVisible(false);
-        setNewPlan({ name: '', price: '', time: '' });
-        cargarPlanes(); // Recargar la lista de planes
-        Alert.alert('Éxito', 'Plan creado correctamente');
+        if (result) {
+          setModalVisible(false);
+          setNewPlan({ name: '', price: '', time: '' });
+          setIsEditing(false);
+          setSelectedPlan(null);
+          cargarPlanes();
+          Alert.alert('Éxito', 'Plan actualizado correctamente');
+        }
+      } else {
+        // Lógica existente para crear un nuevo plan
+        const result = await databaseOperations.plans.create(
+          newPlan.name,
+          parseFloat(newPlan.price),
+          parseInt(newPlan.time),
+          1
+        );
+
+        if (result) {
+          setModalVisible(false);
+          setNewPlan({ name: '', price: '', time: '' });
+          cargarPlanes();
+          Alert.alert('Éxito', 'Plan creado correctamente');
+        }
       }
     } catch (error) {
-      console.error('Error al crear el plan:', error);
-      Alert.alert('Error', 'Ocurrió un error al crear el plan');
+      console.error('Error al guardar el plan:', error);
+      Alert.alert('Error', 'Ocurrió un error al guardar el plan');
     }
   };
 
@@ -90,7 +98,12 @@ export default function PlansScreen() {
     <ScrollView style={styles.container}>
       <TouchableOpacity 
         style={styles.addButton}
-        onPress={() => setModalVisible(true)}
+        onPress={() => {
+          setIsEditing(false);
+          setSelectedPlan(null);
+          setNewPlan({ name: '', price: '', time: '' });
+          setModalVisible(true);
+        }}
       >
         <Ionicons name="add-circle-outline" size={24} color="#FFFFFF" />
         <Text style={styles.addButtonText}>Agregar Nuevo Plan</Text>
@@ -98,8 +111,13 @@ export default function PlansScreen() {
 
       <PlanModal
         visible={modalVisible}
-        onClose={() => setModalVisible(false)}
-        onSave={handleAddPlan}
+        onClose={() => {
+          setModalVisible(false);
+          setIsEditing(false);
+          setSelectedPlan(null);
+          setNewPlan({ name: '', price: '', time: '' });
+        }}
+        onSave={handleSavePlan}
         plan={newPlan}
         setPlan={setNewPlan}
       />

@@ -86,19 +86,6 @@ export const getDatabase = async () => {
       console.log("Organizacion: ", org)
       const orgId = org[0].id;
       
-      // Insertar planes por defecto
-      await database.runAsync(
-        'INSERT INTO plans (name, price, time, organization_id) VALUES (?, ?, ?, ?)',
-        ['Plan Básico', 500, 30, orgId]
-      );
-      await database.runAsync(
-        'INSERT INTO plans (name, price, time, organization_id) VALUES (?, ?, ?, ?)',
-        ['Plan Premium', 800, 30, orgId]
-      );
-      await database.runAsync(
-        'INSERT INTO plans (name, price, time, organization_id) VALUES (?, ?, ?, ?)',
-        ['Plan VIP', 1200, 30, orgId]
-      );
     } else {
       console.log("Organizacion ya existe")
       // Obtener el ID de la organización recién creada
@@ -164,7 +151,15 @@ export const databaseOperations = {
     getAll: async () => {
       const db = await getDatabase();
       return await db.getAllAsync('SELECT * FROM plans');
-    }
+    },
+    update: async (id: number, name: string, price: number, time: number, organizationId: number) => {
+      const db = await getDatabase();
+      const result = await db.runAsync(
+        'UPDATE plans SET name = ?, price = ?, time = ?, organization_id = ?, update_time = CURRENT_TIMESTAMP WHERE id = ?',
+        [name, price, time, organizationId, id]
+      );
+      return result;
+    },
   },
   
   // Operaciones para Subscriptions

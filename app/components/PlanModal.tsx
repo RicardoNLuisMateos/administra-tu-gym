@@ -11,9 +11,10 @@ interface PlanModalProps {
     time: string;
   };
   setPlan: (plan: { name: string; price: string; time: string; }) => void;
+  isEditing?: boolean;
 }
 
-export default function PlanModal({ visible, onClose, onSave, plan, setPlan }: PlanModalProps) {
+export default function PlanModal({ visible, onClose, onSave, plan, setPlan, isEditing }: PlanModalProps) {
   return (
     <Modal
       animationType="slide"
@@ -23,7 +24,9 @@ export default function PlanModal({ visible, onClose, onSave, plan, setPlan }: P
     >
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
-          <Text style={styles.modalTitle}>Nuevo Plan</Text>
+          <Text style={styles.modalTitle}>
+            {isEditing ? 'Editar Plan' : 'Nuevo Plan'}
+          </Text>
           
           <View style={styles.inputContainer}>
             <Text style={styles.inputLabel}>Nombre</Text>
