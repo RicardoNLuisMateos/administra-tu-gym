@@ -150,13 +150,21 @@ export const databaseOperations = {
     },
     getAll: async () => {
       const db = await getDatabase();
-      return await db.getAllAsync('SELECT * FROM plans');
+      return await db.getAllAsync('SELECT * FROM plans WHERE active = 1');
     },
     update: async (id: number, name: string, price: number, time: number, organizationId: number) => {
       const db = await getDatabase();
       const result = await db.runAsync(
         'UPDATE plans SET name = ?, price = ?, time = ?, organization_id = ?, update_time = CURRENT_TIMESTAMP WHERE id = ?',
         [name, price, time, organizationId, id]
+      );
+      return result;
+    },
+    delete: async (id: number) => {
+      const db = await getDatabase();
+      const result = await db.runAsync(
+        'UPDATE plans SET active = 0, update_time = CURRENT_TIMESTAMP WHERE id = ?',
+        [id]
       );
       return result;
     },

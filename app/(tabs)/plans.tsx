@@ -94,6 +94,35 @@ export default function PlansScreen() {
     }
   };
 
+  const handleDeletePlan = (plan: Plan) => {
+    Alert.alert(
+      'Eliminar Plan',
+      `¿Estás seguro de que deseas eliminar el plan ${plan.name}?`,
+      [
+        {
+          text: 'Cancelar',
+          style: 'cancel',
+        },
+        {
+          text: 'Eliminar',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              const result = await databaseOperations.plans.delete(plan.id);
+              if (result) {
+                cargarPlanes(); // Recargar la lista de planes
+                Alert.alert('Éxito', 'Plan eliminado correctamente');
+              }
+            } catch (error) {
+              console.error('Error al eliminar el plan:', error);
+              Alert.alert('Error', 'Ocurrió un error al eliminar el plan');
+            }
+          },
+        },
+      ]
+    );
+  };
+
   return (
     <ScrollView style={styles.container}>
       <TouchableOpacity 
