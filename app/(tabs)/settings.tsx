@@ -45,6 +45,7 @@ export default function SettingsScreen() {
           icon="business-outline"
           title="Información del Gimnasio"
           description="Editar detalles del establecimiento"
+          onPress={() => router.push('/gym-info')}
         />
         <SettingItem
           icon="people-outline"

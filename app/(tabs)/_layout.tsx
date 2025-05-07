@@ -38,6 +38,11 @@ export default function TabLayout() {
         tabBarIcon: ({ color,focused }) => <Ionicons name={ focused ? 'person-add' : 'person-add-outline'} size={24} color={color} />,
         href: null // Esto ocultará la pestaña del tabBar
       }} />
+      <Tabs.Screen name="gym-info" options={{ 
+        title: 'Información del Gimnasio',
+        tabBarIcon: ({ color,focused }) => <Ionicons name={ focused ? 'person-add' : 'person-add-outline'} size={24} color={color} />,
+        href: null // Esto ocultará la pestaña del tabBar
+      }} />
       <Tabs.Screen name="plans" options={{ 
         title: 'Planes',
         tabBarIcon: ({ color,focused }) => <Ionicons name={ focused ? 'list' : 'list-outline'} size={24} color={color} />,
