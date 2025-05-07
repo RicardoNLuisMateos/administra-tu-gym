@@ -116,7 +116,22 @@ export const databaseOperations = {
     },
     getAll: async () => {
       const db = await getDatabase();
-      return await db.getAllAsync('SELECT * FROM organization');
+      return await db.getAllAsync('SELECT * FROM organization WHERE id = 1');
+    },
+    update: async (id: number, name: string): Promise<boolean> => {
+      try {
+        const db = await getDatabase();
+        const result = await db.execAsync(`
+          UPDATE organizations 
+          SET name = ? 
+          WHERE id = ?
+        `, [name, id]);
+        
+        return result.rowsAffected > 0;
+      } catch (error) {
+        console.error('Error al actualizar la organización:', error);
+        throw error;
+      }
     }
   },
 
