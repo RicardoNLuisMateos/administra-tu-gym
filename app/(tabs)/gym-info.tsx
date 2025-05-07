@@ -1,14 +1,82 @@
-import { StyleSheet, View, Text, ScrollView, TextInput, TouchableOpacity } from 'react-native';
-import { useState } from 'react';
+import { StyleSheet, View, Text, ScrollView, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'expo-router';
+import { databaseOperations } from '../database/database';
 
 export default function GymInfoScreen() {
   const [gymName, setGymName] = useState('Mi Gimnasio');
   const router = useRouter();
 
-  const handleSave = () => {
+  useEffect(() => {
+    cargarNombreGimnasio();
+  }, []);
+
+  const cargarNombreGimnasio = async () => {
+    try {
+      const organizacion = await databaseOperations.organization.getAll();
+      if (organizacion && organizacion.length > 0 && organizacion[0].name.trim()) {
+        setGymName(organizacion[0].name);
+      }
+    } catch (error) {
+      console.error('Error al cargar el nombre del gimnasio:', error);
+    }
+  };
+
+  const handleSave = async () => {
     // Aquí implementaremos la lógica para guardar el nombre del gimnasio
-    router.back();
+    try {
+      if (!gymName.trim()) {
+        Alert.alert(
+          'Error',
+          'Por favor ingresa el nombre del gimnasio',
+          [
+            {
+              text: 'OK',
+              style: 'default'
+            }
+          ],
+          {
+            userInterfaceStyle: 'dark'
+          }
+        );
+        return;
+      }
+
+      const result = await databaseOperations.organization.update(1, gymName);
+      
+      if (result) {
+        Alert.alert(
+          'Éxito',
+          'Nombre del gimnasio actualizado correctamente',
+          [
+            {
+              text: 'OK',
+              style: 'default',
+              //onPress: () => router.back()
+            }
+          ],
+          {
+            userInterfaceStyle: 'dark'
+          }
+        );
+      }
+    } catch (error) {
+      console.error('Error al actualizar el nombre del gimnasio:', error);
+      Alert.alert(
+        'Error',
+        'Ocurrió un error al guardar los cambios',
+        [
+          {
+            text: 'OK',
+            style: 'default'
+          }
+        ],
+        {
+          userInterfaceStyle: 'dark'
+        }
+      );
+    }
+    //router.back();
   };
 
   return (

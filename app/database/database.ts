@@ -121,13 +121,13 @@ export const databaseOperations = {
     update: async (id: number, name: string): Promise<boolean> => {
       try {
         const db = await getDatabase();
-        const result = await db.execAsync(`
-          UPDATE organizations 
+        const result = await db.runAsync(`
+          UPDATE organization 
           SET name = ? 
           WHERE id = ?
         `, [name, id]);
-        
-        return result.rowsAffected > 0;
+        const org = await db.getAllAsync('SELECT * FROM organization LIMIT 1');
+        return true;
       } catch (error) {
         console.error('Error al actualizar la organización:', error);
         throw error;
