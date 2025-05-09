@@ -56,6 +56,7 @@ export default function PlansScreen() {
   const handleSavePlan = async () => {
     try {
       if (!newPlan.name.trim() || !newPlan.price || !newPlan.time) {
+        setSelectedPlan(null); // Aseguramos que no hay plan seleccionado
         setCustomModalConfig({
           type: 'error',
           message: 'Por favor completa todos los campos'
@@ -106,6 +107,7 @@ export default function PlansScreen() {
       }
     } catch (error) {
       console.error('Error al guardar el plan:', error);
+      setSelectedPlan(null); // Aseguramos que no hay plan seleccionado
       setCustomModalConfig({
         type: 'error',
         message: 'Ocurrió un error al guardar el plan'
@@ -115,32 +117,12 @@ export default function PlansScreen() {
   };
 
   const handleDeletePlan = (plan: Plan) => {
-    Alert.alert(
-      'Eliminar Plan',
-      `¿Estás seguro de que deseas eliminar el plan ${plan.name}?`,
-      [
-        {
-          text: 'Cancelar',
-          style: 'cancel',
-        },
-        {
-          text: 'Eliminar',
-          style: 'destructive',
-          onPress: async () => {
-            try {
-              const result = await databaseOperations.plans.delete(plan.id);
-              if (result) {
-                cargarPlanes(); // Recargar la lista de planes
-                Alert.alert('Éxito', 'Plan eliminado correctamente');
-              }
-            } catch (error) {
-              console.error('Error al eliminar el plan:', error);
-              Alert.alert('Error', 'Ocurrió un error al eliminar el plan');
-            }
-          },
-        },
-      ]
-    );
+    setSelectedPlan(plan);
+    setCustomModalConfig({
+      type: 'error',
+      message: `¿Estás seguro de que deseas eliminar el plan ${plan.name}?`
+    });
+    setCustomModalVisible(true);
   };
 
   return (
@@ -201,6 +183,28 @@ export default function PlansScreen() {
         type={customModalConfig.type}
         message={customModalConfig.message}
         onClose={() => setCustomModalVisible(false)}
+        showConfirmButton={!!selectedPlan}
+        onConfirm={async () => {
+          if (selectedPlan) {
+            try {
+              const result = await databaseOperations.plans.delete(selectedPlan.id);
+              if (result) {
+                cargarPlanes();
+                setCustomModalConfig({
+                  type: 'success',
+                  message: 'Plan eliminado correctamente'
+                });
+              }
+            } catch (error) {
+              console.error('Error al eliminar el plan:', error);
+              setCustomModalConfig({
+                type: 'error',
+                message: 'Ocurrió un error al eliminar el plan'
+              });
+            }
+            setSelectedPlan(null);
+          }
+        }}
       />
     </ScrollView>
   );
