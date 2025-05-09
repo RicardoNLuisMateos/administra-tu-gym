@@ -1,10 +1,16 @@
-import { StyleSheet, View, Text, ScrollView, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, View, Text, ScrollView, TextInput, TouchableOpacity } from 'react-native';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'expo-router';
 import { databaseOperations } from '../database/database';
+import CustomModal from '../components/CustomModal';
 
 export default function GymInfoScreen() {
   const [gymName, setGymName] = useState('Mi Gimnasio');
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalConfig, setModalConfig] = useState({
+    type: 'success',
+    message: ''
+  });
   const router = useRouter();
 
   useEffect(() => {
@@ -23,60 +29,33 @@ export default function GymInfoScreen() {
   };
 
   const handleSave = async () => {
-    // Aquí implementaremos la lógica para guardar el nombre del gimnasio
     try {
       if (!gymName.trim()) {
-        Alert.alert(
-          'Error',
-          'Por favor ingresa el nombre del gimnasio',
-          [
-            {
-              text: 'OK',
-              style: 'default'
-            }
-          ],
-          {
-            userInterfaceStyle: 'dark'
-          }
-        );
+        setModalConfig({
+          type: 'error',
+          message: 'Por favor ingresa el nombre del gimnasio'
+        });
+        setModalVisible(true);
         return;
       }
 
       const result = await databaseOperations.organization.update(1, gymName);
       
       if (result) {
-        Alert.alert(
-          'Éxito',
-          'Nombre del gimnasio actualizado correctamente',
-          [
-            {
-              text: 'OK',
-              style: 'default',
-              //onPress: () => router.back()
-            }
-          ],
-          {
-            userInterfaceStyle: 'dark'
-          }
-        );
+        setModalConfig({
+          type: 'success',
+          message: 'Nombre del gimnasio actualizado correctamente'
+        });
+        setModalVisible(true);
       }
     } catch (error) {
       console.error('Error al actualizar el nombre del gimnasio:', error);
-      Alert.alert(
-        'Error',
-        'Ocurrió un error al guardar los cambios',
-        [
-          {
-            text: 'OK',
-            style: 'default'
-          }
-        ],
-        {
-          userInterfaceStyle: 'dark'
-        }
-      );
+      setModalConfig({
+        type: 'error',
+        message: 'Ocurrió un error al guardar los cambios'
+      });
+      setModalVisible(true);
     }
-    //router.back();
   };
 
   return (
@@ -101,6 +80,12 @@ export default function GymInfoScreen() {
           <Text style={styles.saveButtonText}>Guardar Cambios</Text>
         </TouchableOpacity>
       </View>
+      <CustomModal
+        visible={modalVisible}
+        type={modalConfig.type as 'success' | 'error'}
+        message={modalConfig.message}
+        onClose={() => setModalVisible(false)}
+      />
     </ScrollView>
   );
 }
