@@ -3,6 +3,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useEffect, useState } from 'react';
 import { databaseOperations } from '../database/database';
 import PlanModal from '../components/PlanModal';
+import CustomModal from '../components/CustomModal';
 
 interface Plan {
   id: number;
@@ -22,6 +23,11 @@ export default function PlansScreen() {
     time: ''
   });
   const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
+  const [customModalVisible, setCustomModalVisible] = useState(false);
+  const [customModalConfig, setCustomModalConfig] = useState({
+    type: 'success' as 'success' | 'error',
+    message: ''
+  });
 
   useEffect(() => {
     cargarPlanes();
@@ -50,18 +56,21 @@ export default function PlansScreen() {
   const handleSavePlan = async () => {
     try {
       if (!newPlan.name.trim() || !newPlan.price || !newPlan.time) {
-        Alert.alert('Error', 'Por favor completa todos los campos');
+        setCustomModalConfig({
+          type: 'error',
+          message: 'Por favor completa todos los campos'
+        });
+        setCustomModalVisible(true);
         return;
       }
 
       if (isEditing && selectedPlan) {
-        // Aquí implementaremos la actualización del plan
         const result = await databaseOperations.plans.update(
           selectedPlan.id,
           newPlan.name,
           parseFloat(newPlan.price),
           parseInt(newPlan.time),
-          1 // ID de la organización
+          1
         );
 
         if (result) {
@@ -70,10 +79,13 @@ export default function PlansScreen() {
           setIsEditing(false);
           setSelectedPlan(null);
           cargarPlanes();
-          Alert.alert('Éxito', 'Plan actualizado correctamente');
+          setCustomModalConfig({
+            type: 'success',
+            message: 'Plan actualizado correctamente'
+          });
+          setCustomModalVisible(true);
         }
       } else {
-        // Lógica existente para crear un nuevo plan
         const result = await databaseOperations.plans.create(
           newPlan.name,
           parseFloat(newPlan.price),
@@ -85,12 +97,20 @@ export default function PlansScreen() {
           setModalVisible(false);
           setNewPlan({ name: '', price: '', time: '' });
           cargarPlanes();
-          Alert.alert('Éxito', 'Plan creado correctamente');
+          setCustomModalConfig({
+            type: 'success',
+            message: 'Plan creado correctamente'
+          });
+          setCustomModalVisible(true);
         }
       }
     } catch (error) {
       console.error('Error al guardar el plan:', error);
-      Alert.alert('Error', 'Ocurrió un error al guardar el plan');
+      setCustomModalConfig({
+        type: 'error',
+        message: 'Ocurrió un error al guardar el plan'
+      });
+      setCustomModalVisible(true);
     }
   };
 
@@ -176,6 +196,12 @@ export default function PlansScreen() {
           </View>
         ))}
       </View>
+      <CustomModal
+        visible={customModalVisible}
+        type={customModalConfig.type}
+        message={customModalConfig.message}
+        onClose={() => setCustomModalVisible(false)}
+      />
     </ScrollView>
   );
 }
