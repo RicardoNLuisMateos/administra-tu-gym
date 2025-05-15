@@ -57,6 +57,7 @@ const initializeDatabase = async () => {
       amount REAL NOT NULL,
       payment_date TEXT NOT NULL,
       active BOOLEAN DEFAULT 1,
+      paid BOOLEAN DEFAULT 0,
       create_time DATETIME DEFAULT CURRENT_TIMESTAMP,
       update_time DATETIME DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (subscription_id) REFERENCES subscriptions (id)
