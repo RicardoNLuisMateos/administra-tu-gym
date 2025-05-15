@@ -53,16 +53,22 @@ export default function Index() {
 
         <View style={styles.statsContainer}>
           <View style={styles.statItem}>
-            <Text style={styles.statLabel}>Ingresos</Text>
-            <Text style={styles.statValue}>$8750</Text>
+            <View style={styles.statContent}>
+              <Text style={styles.statLabel}>Ingresos</Text>
+              <Text style={styles.statValue}>$8750</Text>
+            </View>
           </View>
           <View style={styles.statItem}>
-            <Text style={styles.statLabel}>Egresos</Text>
-            <Text style={styles.statValue}>$3200</Text>
+            <View style={styles.statContent}>
+              <Text style={styles.statLabel}>Egresos</Text>
+              <Text style={styles.statValue}>$3200</Text>
+            </View>
           </View>
           <View style={styles.statItem}>
-            <Text style={styles.statLabel}>Balance</Text>
-            <Text style={styles.statValue}>$5550</Text>
+            <View style={styles.statContent}>
+              <Text style={styles.statLabel}>Balance</Text>
+              <Text style={styles.statValue}>$5550</Text>
+            </View>
           </View>
         </View>
 
@@ -152,19 +158,26 @@ const styles = StyleSheet.create({
   },
   statsContainer: {
     marginBottom: 24,
+    backgroundColor: '#1E1E1E',
+    borderRadius: 12,
+    padding: 16,
   },
   statItem: {
-    marginBottom: 16,
+    marginBottom: 8,
+  },
+  statContent: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   statLabel: {
-    fontSize: 18,
-    fontWeight: 'bold',
+    fontSize: 16,
     color: '#FFFFFF',
-    marginBottom: 4,
   },
   statValue: {
-    fontSize: 24,
+    fontSize: 16,
     color: '#FFFFFF',
+    fontWeight: '600',
   },
   actionButtons: {
     flexDirection: 'row',
