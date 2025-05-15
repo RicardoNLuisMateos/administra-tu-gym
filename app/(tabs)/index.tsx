@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   statLabel: {
-    fontSize: 16,
+    fontSize: 19,
     color: '#FFFFFF',
   },
   statValue: {
