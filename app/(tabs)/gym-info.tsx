@@ -6,6 +6,10 @@ import CustomModal from '../components/CustomModal';
 
 export default function GymInfoScreen() {
   const [gymName, setGymName] = useState('Mi Gimnasio');
+  const [gymPrice, setGymPrice] = useState(0);
+  const [gymRecargoDays, setGymRecargoDays] = useState(0);
+  const [gymMonto, setGymMonto] = useState(0);
+  const [gymCancelacion, setGymCancelacion] = useState(0);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalConfig, setModalConfig] = useState({
     type: 'success',
@@ -39,7 +43,7 @@ export default function GymInfoScreen() {
         return;
       }
 
-      const result = await databaseOperations.organization.update(1, gymName);
+      const result = await databaseOperations.organization.update(1, gymName, gymPrice, gymRecargoDays, gymMonto, gymCancelacion);
       
       if (result) {
         setModalConfig({
@@ -70,6 +74,42 @@ export default function GymInfoScreen() {
             onChangeText={setGymName}
             placeholder="Ingrese el nombre del gimnasio"
             placeholderTextColor="#888888"
+          />
+          <Text style={styles.inputLabel}>Precio de inscripción</Text>
+          <TextInput
+            style={styles.input}
+            value={gymPrice}
+            onChangeText={gymPrice => setGymPrice(gymPrice)}
+            placeholder="Precio de inscripción"
+            placeholderTextColor="#888888"
+            keyboardType="numeric"
+          />
+          <Text style={styles.inputLabel}>Configuración de días de recargo</Text>
+          <TextInput
+            style={styles.input}
+            value={gymRecargoDays}
+            onChangeText={gymRecargoDays => setGymRecargoDays(gymRecargoDays)}
+            placeholder="Número de días de recargo antes de la fecha de caducidad"
+            placeholderTextColor="#888888"
+            keyboardType="numeric"
+          />
+          <Text style={styles.inputLabel}>Monto de recargo</Text>
+          <TextInput
+            style={styles.input}
+            value={gymMonto}
+            onChangeText={gymMonto => setGymMonto(gymMonto)}
+            placeholder="Monto de recargo de recargo"
+            placeholderTextColor="#888888"
+            keyboardType="numeric"
+          />
+          <Text style={styles.inputLabel}>Cancelación automatica</Text>
+          <TextInput
+            style={styles.input}
+            value={gymCancelacion}
+            onChangeText={gymCancelacion => setGymCancelacion(gymCancelacion)}
+            placeholder="Días de cancelación después de la fecha de caducidad"
+            placeholderTextColor="#888888"
+            keyboardType="numeric"
           />
         </View>
         

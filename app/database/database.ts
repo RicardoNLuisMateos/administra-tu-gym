@@ -11,6 +11,10 @@ const initializeDatabase = async () => {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       name TEXT NOT NULL,
       logo TEXT,
+      registration_price INTEGER,
+      retardation INTEGER,
+      retardation_price INTEGER,
+      automatic_cancellation_day INTEGER,
       active BOOLEAN DEFAULT 1,
       create_time DATETIME DEFAULT CURRENT_TIMESTAMP,
       update_time DATETIME DEFAULT CURRENT_TIMESTAMP
@@ -77,6 +81,8 @@ export const getDatabase = async () => {
     // Insertar organización por defecto si no existe
     const orgs = await database.getAllAsync('SELECT * FROM organization');
     if (orgs.length === 0) {
+      console.log("Organizacion no existe")
+      // Insertar organización por defecto
       await database.runAsync(
         'INSERT INTO organization (name) VALUES (?)',
         ['Mi Gimnasio']
@@ -119,14 +125,19 @@ export const databaseOperations = {
       const db = await getDatabase();
       return await db.getAllAsync('SELECT * FROM organization WHERE id = 1');
     },
-    update: async (id: number, name: string): Promise<boolean> => {
+    update: async (id: number, name: string, registration_price:number, retardation: number, retardation_price: number, automatic_cancellation_day: number): Promise<boolean> => {
       try {
         const db = await getDatabase();
         const result = await db.runAsync(`
           UPDATE organization 
-          SET name = ? 
+          SET name = ?,
+          registration_price = ?,
+          retardation = ?,
+          retardation_price = ?,
+          automatic_cancellation_day = ?,
+          update_time = CURRENT_TIMESTAMP
           WHERE id = ?
-        `, [name, id]);
+        `, [name, registration_price, retardation, retardation_price, automatic_cancellation_day, id]);
         const org = await db.getAllAsync('SELECT * FROM organization LIMIT 1');
         return true;
       } catch (error) {
