@@ -25,7 +25,12 @@ export default function GymInfoScreen() {
     try {
       const organizacion = await databaseOperations.organization.getAll();
       if (organizacion && organizacion.length > 0 && organizacion[0].name.trim()) {
+        console.log(organizacion[0]);
         setGymName(organizacion[0].name);
+        setGymPrice(organizacion[0].registration_price?.toString() || '0');
+        setGymRecargoDays(organizacion[0].retardation?.toString() || '0');
+        setGymMonto(organizacion[0].retardation_price?.toString() || '0');
+        setGymCancelacion(organizacion[0].automatic_cancellation_day?.toString() || '0');
       }
     } catch (error) {
       console.error('Error al cargar el nombre del gimnasio:', error);
@@ -43,7 +48,14 @@ export default function GymInfoScreen() {
         return;
       }
 
-      const result = await databaseOperations.organization.update(1, gymName, gymPrice, gymRecargoDays, gymMonto, gymCancelacion);
+      const result = await databaseOperations.organization.update(
+        1, 
+        gymName, 
+        parseInt(gymPrice) || 0,
+        parseInt(gymRecargoDays) || 0,
+        parseInt(gymMonto) || 0,
+        parseInt(gymCancelacion) || 0
+      );
       
       if (result) {
         setModalConfig({
@@ -78,8 +90,8 @@ export default function GymInfoScreen() {
           <Text style={styles.inputLabel}>Precio de inscripción</Text>
           <TextInput
             style={styles.input}
-            value={gymPrice}
-            onChangeText={gymPrice => setGymPrice(gymPrice)}
+            value={gymPrice.toString()}
+            onChangeText={value => setGymPrice(value)}
             placeholder="Precio de inscripción"
             placeholderTextColor="#888888"
             keyboardType="numeric"
@@ -87,8 +99,8 @@ export default function GymInfoScreen() {
           <Text style={styles.inputLabel}>Configuración de días de recargo</Text>
           <TextInput
             style={styles.input}
-            value={gymRecargoDays}
-            onChangeText={gymRecargoDays => setGymRecargoDays(gymRecargoDays)}
+            value={gymRecargoDays.toString()}
+            onChangeText={value => setGymRecargoDays(value)}
             placeholder="Número de días de recargo antes de la fecha de caducidad"
             placeholderTextColor="#888888"
             keyboardType="numeric"
@@ -96,8 +108,8 @@ export default function GymInfoScreen() {
           <Text style={styles.inputLabel}>Monto de recargo</Text>
           <TextInput
             style={styles.input}
-            value={gymMonto}
-            onChangeText={gymMonto => setGymMonto(gymMonto)}
+            value={gymMonto.toString()}
+            onChangeText={value => setGymMonto(value)}
             placeholder="Monto de recargo de recargo"
             placeholderTextColor="#888888"
             keyboardType="numeric"
@@ -105,8 +117,8 @@ export default function GymInfoScreen() {
           <Text style={styles.inputLabel}>Cancelación automatica</Text>
           <TextInput
             style={styles.input}
-            value={gymCancelacion}
-            onChangeText={gymCancelacion => setGymCancelacion(gymCancelacion)}
+            value={gymCancelacion.toString()}
+            onChangeText={value => setGymCancelacion(value)}
             placeholder="Días de cancelación después de la fecha de caducidad"
             placeholderTextColor="#888888"
             keyboardType="numeric"
