@@ -159,7 +159,7 @@ export default function PlansScreen() {
             <View style={styles.planInfo}>
               <Text style={styles.planName}>{plan.name}</Text>
               <Text style={styles.planPrice}>${plan.price}</Text>
-              <Text style={styles.planDuration}>{plan.time} días</Text>
+              <Text style={styles.planDuration}>{plan.time} Mes</Text>
             </View>
             <View style={styles.planActions}>
               <TouchableOpacity 
