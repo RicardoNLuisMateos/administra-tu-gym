@@ -3,6 +3,7 @@ import { Picker } from '@react-native-picker/picker';
 import { useState, useEffect } from 'react';
 import { databaseOperations } from '../database/database';
 import { useRouter } from 'expo-router';
+import CustomModal from '../components/CustomModal';
 
 interface Plan {
   id: number;
@@ -20,6 +21,11 @@ export default function AddMember() {
   const [suscriptionActive, setSuscriptionActive] = useState(false);
   const [planes, setPlanes] = useState<Plan[]>([]);
   const router = useRouter();
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalConfig, setModalConfig] = useState({
+    type: 'success' as 'success' | 'error',
+    message: ''
+  });
 
   useEffect(() => {
     const cargarPlanes = async () => {
@@ -44,12 +50,20 @@ export default function AddMember() {
     try {
       // Validaciones básicas
       if (!nombre.trim()) {
-        Alert.alert('Error', 'Por favor ingresa el nombre del miembro');
+        setModalConfig({
+          type: 'error',
+          message: 'Por favor ingresa el nombre del miembro'
+        });
+        setModalVisible(true);
         return;
       }
 
       if (!plan) {
-        Alert.alert('Error', 'Por favor selecciona un plan');
+        setModalConfig({
+          type: 'error',
+          message: 'Por favor selecciona un plan'
+        });
+        setModalVisible(true);
         return;
       }
       console.log("databaseOperations => ", databaseOperations)
@@ -60,28 +74,32 @@ export default function AddMember() {
         // Crear la suscripción
         const member = await databaseOperations.subscriptions.create({
           member_id: memberResult.lastInsertRowId,
-          plan_id: parseInt(plan)
+          plan_id: parseInt(plan),
+          start_date: new Date().toISOString().split('T')[0],
         });
         console.log("member => ", member)
         if (!member) {
-          Alert.alert('Error', 'Ocurrió un error al crear la suscripción');
+          setModalConfig({
+            type: 'error',
+            message: 'Ocurrió un error al crear la suscripción'
+          });
+          setModalVisible(true);
           return;
         }
 
-        Alert.alert(
-          'Éxito',
-          'Miembro agregado correctamente',
-          [
-            {
-              text: 'OK',
-              //onPress: () => router.back()
-            }
-          ]
-        );
+        setModalConfig({
+          type: 'success',
+          message: 'Miembro agregado correctamente'
+        });
+        setModalVisible(true);
       }
     } catch (error) {
       console.error('Error al guardar el miembro:', error);
-      Alert.alert('Error', 'Ocurrió un error al guardar el miembro');
+      setModalConfig({
+        type: 'error',
+        message: 'Ocurrió un error al guardar el miembro'
+      });
+      setModalVisible(true);
     }
   };
 
@@ -166,6 +184,12 @@ export default function AddMember() {
         >
           <Text style={styles.saveButtonText}>Guardar</Text>
         </TouchableOpacity>
+        <CustomModal
+          visible={modalVisible}
+          type={modalConfig.type}
+          message={modalConfig.message}
+          onClose={() => setModalVisible(false)}
+        />
       </ScrollView>
     </SafeAreaView>
   );

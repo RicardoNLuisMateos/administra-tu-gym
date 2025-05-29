@@ -47,7 +47,7 @@ const initializeDatabase = async () => {
       member_id INTEGER,
       plan_id INTEGER,
       start_date DATETIME NOT NULL,
-      end_date DATETIME NOT NULL,
+      end_date DATETIME DEFAULT NULL,
       active BOOLEAN DEFAULT 1,
       create_time DATETIME DEFAULT CURRENT_TIMESTAMP,
       update_time DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -199,11 +199,12 @@ export const databaseOperations = {
   
   // Operaciones para Subscriptions
   subscriptions: {
-    create: async ({ member_id, plan_id }: { member_id: number, plan_id: number }) => {
+    create: async ({ member_id, plan_id, start_date }: { member_id: number, plan_id: number, start_date: string }) => {
+      console.log("Create suscriiption");
       const db = await getDatabase();
       await db.runAsync(
-        'INSERT INTO subscriptions (member_id, plan_id) VALUES (?, ?)',
-        [member_id, plan_id]
+        'INSERT INTO subscriptions (member_id, plan_id, start_date) VALUES (?, ?, ?)',
+        [member_id, plan_id, start_date]
       );
       const member = await db.getAllAsync(
         "SELECT s.id suscription_id, s.member_id, s.plan_id, m.name FROM member m INNER JOIN subscriptions s ON m.id = s.member_id WHERE m.id = ?",
