@@ -46,6 +46,19 @@ export default function AddMember() {
     { fecha: '01/03/2024', monto: 500 },
   ];
 
+  // Función para limpiar todos los campos
+  const resetFields = () => {
+    setNombre('');
+    setPlan('');
+    setDeuda('0');
+    setSuscriptionActive(false);
+  };
+
+  // Limpiar campos cuando el componente se monta
+  useEffect(() => {
+    resetFields();
+  }, []);
+
   const handleSaveMember = async () => {
     try {
       // Validaciones básicas
@@ -92,7 +105,8 @@ export default function AddMember() {
           message: 'Miembro agregado correctamente'
         });
         setModalVisible(true);
-        // Agregar un pequeño retraso antes de navegar para que el usuario pueda ver el mensaje
+        // Limpiar campos antes de navegar
+        resetFields();
         setTimeout(() => {
           router.push('/members');
         }, 1500);
