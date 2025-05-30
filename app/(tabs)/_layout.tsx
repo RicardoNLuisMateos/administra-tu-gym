@@ -33,6 +33,11 @@ export default function TabLayout() {
         title: 'Dashboard',
         tabBarIcon: ({ color,focused }) => <Ionicons name={ focused ? 'home' : 'home-outline'} size={24} color={color} />
       }} />
+      <Tabs.Screen name="members" options={{ 
+        title: 'Miembros',
+        tabBarIcon: ({ color,focused }) => <Ionicons name={ focused ? 'people' : 'people-outline'} size={24} color={color} />,
+        href:null
+      }} />
       <Tabs.Screen name="add-member" options={{ 
         title: 'Agregar Miembro',
         tabBarIcon: ({ color,focused }) => <Ionicons name={ focused ? 'person-add' : 'person-add-outline'} size={24} color={color} />,

@@ -82,7 +82,10 @@ export default function Index() {
           <TouchableOpacity style={styles.actionButton}>
             <Text style={styles.actionButtonText}>Egresos</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.actionButton}>
+          <TouchableOpacity 
+            style={styles.actionButton}
+            onPress={() => router.push('/members')}
+          >
             <Text style={styles.actionButtonText}>Miembros</Text>
           </TouchableOpacity>
         </View>

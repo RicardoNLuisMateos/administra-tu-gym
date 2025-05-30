@@ -161,7 +161,27 @@ export const databaseOperations = {
     },
     getAll: async () => {
       const db = await getDatabase();
-      return await db.getAllAsync('SELECT * FROM member');
+
+      const data = await db.getAllAsync(`
+        SELECT 
+          m.id,
+          m.name,
+          m.active,
+          p.name as plan_name,
+          s.start_date,
+          s.end_date,
+          CASE
+            WHEN m.active = 0 THEN 'inactive'
+            WHEN s.end_date < date('now') THEN 'defaulter'
+            ELSE 'active'
+          END as status
+        FROM member m
+        LEFT JOIN subscriptions s ON m.id = s.member_id AND s.active = 1
+        LEFT JOIN plans p ON s.plan_id = p.id
+        WHERE m.active = 1
+      `);
+      console.log("data: ", data)
+      return data;
     }
   },
 
