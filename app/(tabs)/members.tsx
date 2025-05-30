@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { databaseOperations } from '../database/database';
+import { useFocusEffect } from 'expo-router';
+import { useCallback } from 'react';
 
 type Member = {
   id: number;
@@ -16,9 +18,11 @@ export default function MembersScreen() {
   const [activeTab, setActiveTab] = useState<'active' | 'defaulter' | 'inactive'>('active');
   const router = useRouter();
 
-  useEffect(() => {
-    loadMembers();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      loadMembers();
+    }, [])
+  );
 
   const loadMembers = async () => {
     try {

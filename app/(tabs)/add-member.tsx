@@ -92,6 +92,10 @@ export default function AddMember() {
           message: 'Miembro agregado correctamente'
         });
         setModalVisible(true);
+        // Agregar un pequeño retraso antes de navegar para que el usuario pueda ver el mensaje
+        setTimeout(() => {
+          router.push('/members');
+        }, 1500);
       }
     } catch (error) {
       console.error('Error al guardar el miembro:', error);

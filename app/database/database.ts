@@ -178,7 +178,7 @@ export const databaseOperations = {
         FROM member m
         LEFT JOIN subscriptions s ON m.id = s.member_id AND s.active = 1
         LEFT JOIN plans p ON s.plan_id = p.id
-        WHERE m.active = 1
+        WHERE m.active = 1 ORDER BY m.id DESC
       `);
       console.log("data: ", data)
       return data;
